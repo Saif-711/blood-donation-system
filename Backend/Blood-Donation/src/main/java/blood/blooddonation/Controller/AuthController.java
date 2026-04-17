@@ -1,6 +1,8 @@
 package blood.blooddonation.Controller;
 
 
+import blood.blooddonation.Dto.LoginRequest;
+import blood.blooddonation.Dto.LoginResponse;
 import blood.blooddonation.Dto.RegisterRequest;
 import blood.blooddonation.Service.AuthService;
 import org.springframework.http.HttpStatus;
@@ -19,15 +21,24 @@ public class AuthController {
     public AuthController(AuthService authService) {
         this.authService = authService;
     }
-    @PostMapping
+    @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
         try {
             authService.register(request);
-            return ResponseEntity.ok(Map.of("message", "User registered successfully"));
+            return new ResponseEntity<>(
+                    HttpStatus.CREATED
+            );
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(
                     Map.of("error", e.getMessage())
             );
         }
+    }
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest){
+        return new ResponseEntity<>(
+                authService.signin(loginRequest),
+                HttpStatus.OK
+        );
     }
 }
