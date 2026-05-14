@@ -77,4 +77,18 @@ public class GlobalExceptionHandler {
         );
     }
 
+    @ExceptionHandler(org.springframework.security.authentication.BadCredentialsException.class)
+    public ResponseEntity<?> handleBadCredentials() {
+        return ResponseEntity
+                .status(401)
+                .body(Map.of("error", "Invalid email or password"));
+    }
+
+    @ExceptionHandler(org.springframework.security.core.userdetails.UsernameNotFoundException.class)
+    public ResponseEntity<?> handleUserNotFound() {
+        return ResponseEntity
+                .status(401)
+                .body(Map.of("error", "Invalid email or password"));
+    }
+
 }
